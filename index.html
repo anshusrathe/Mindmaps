@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mindmaps</title>
+</head>
+<body>
+    <h1>Learn Better with Mindmaps</h1>
+    <div>
+        <h2>List of Mindmaps</h2>
+        <ul id="mindmap-list">
+            <!-- List of mindmap files will be added here -->
+        </ul>
+    </div>
+    <script>
+        const mindmapList = document.getElementById('mindmap-list');
+        const mapsCreatedFiles = ["mindmap1.html", "mindmap2.html"];
+
+        mapsCreatedFiles.forEach(file => {
+            const listItem = document.createElement('li');
+            const link = document.createElement('a');
+            link.href = `MapsCreated/${file}`;
+            link.textContent = file;
+            listItem.appendChild(link);
+            mindmapList.appendChild(listItem);
+        });
+    </script>
+</body>
+</html>
