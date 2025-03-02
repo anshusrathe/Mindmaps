@@ -13,16 +13,20 @@
     </div>
     <script>
         const mindmapList = document.getElementById('mindmap-list');
-        const mapsCreatedFiles = ["mindmap1.html", "mindmap2.html"];
+        const mapsCreatedFiles = ["Entrepreneurship_Management.html"];
 
-        mapsCreatedFiles.forEach(file => {
-            const listItem = document.createElement('li');
-            const link = document.createElement('a');
-            link.href = `MapsCreated/${file}`;
-            link.textContent = file;
-            listItem.appendChild(link);
-            mindmapList.appendChild(listItem);
-        });
+        function updateMindmapList() {
+            mapsCreatedFiles.forEach(file => {
+                const listItem = document.createElement('li');
+                const link = document.createElement('a');
+                link.href = `MapsCreated/${file}`;
+                link.textContent = file;
+                listItem.appendChild(link);
+                mindmapList.appendChild(listItem);
+            });
+        }
+
+        updateMindmapList();
     </script>
 </body>
 </html>
