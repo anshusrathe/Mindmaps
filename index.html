@@ -48,7 +48,7 @@
     <h1>Learn Through Mindmaps</h1>
     
     <div id="error-message">
-        Error: Unable to load mindmap files. Please check your repository setup.
+        Error: Unable to load mindmap files.
     </div>
 
     <div>
@@ -62,52 +62,47 @@
         const mindmapList = document.getElementById('mindmap-list');
         const errorMessage = document.getElementById('error-message');
 
-        async function updateMindmapList() {
-            try {
-                // Fetch the list of files in the MapsCreated directory
-                const response = await fetch('MapsCreated/');
-                
-                if (!response.ok) {
-                    throw new Error('Failed to fetch directory contents');
-                }
+        // Predefined list of mindmap files
+        const mindmapFiles = [
+            "Entrepreneurship_Management.html",
+            "Business_Ethics_&_Corporate_Governance.html"
+        ];
 
-                // Parse the response as text (this assumes a directory listing HTML)
-                const text = await response.text();
-                
-                // Create a temporary div to parse the HTML
-                const parser = new DOMParser();
-                const htmlDoc = parser.parseFromString(text, 'text/html');
-                
-                // Select all file links (adjust selector as needed based on your server's directory listing)
-                const fileLinks = htmlDoc.querySelectorAll('a');
-                
-                // Clear any existing list items
+        function updateMindmapList() {
+            try {
+                // Clear existing list
                 mindmapList.innerHTML = '';
-                
-                // Filter and add HTML files
-                fileLinks.forEach(link => {
-                    const fileName = link.textContent;
-                    // Only add .html files that are not directories
-                    if (fileName.endsWith('.html') && !fileName.endsWith('/')) {
-                        const listItem = document.createElement('li');
-                        const fileLink = document.createElement('a');
-                        fileLink.href = `MapsCreated/${fileName}`;
-                        fileLink.textContent = fileName.replace('.html', '').replace(/_/g, ' ');
-                        listItem.appendChild(fileLink);
-                        mindmapList.appendChild(listItem);
-                    }
+
+                // Add each mindmap file as a list item
+                mindmapFiles.forEach(file => {
+                    const listItem = document.createElement('li');
+                    const link = document.createElement('a');
+                    
+                    // Remove .html and replace underscores with spaces for display
+                    const displayName = file
+                        .replace('.html', '')
+                        .replace(/_/g, ' ');
+                    
+                    link.href = `MapsCreated/${file}`;
+                    link.textContent = displayName;
+                    
+                    listItem.appendChild(link);
+                    mindmapList.appendChild(listItem);
                 });
 
-                // Hide error message if files are found
+                // Hide error message
                 errorMessage.style.display = 'none';
             } catch (error) {
-                console.error('Error fetching mindmap files:', error);
+                console.error('Error updating mindmap list:', error);
                 errorMessage.style.display = 'block';
             }
         }
 
-        // Update the list when the page loads
+        // Update list when page loads
         updateMindmapList();
+
+        // Optional: Add a comment explaining how to update the list
+        console.log('To add new mindmaps, update the mindmapFiles array in the script.');
     </script>
 </body>
 </html>
