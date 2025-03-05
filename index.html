@@ -82,43 +82,52 @@
         const errorMessage = document.getElementById('error-message');
         const searchInput = document.getElementById('search-input');
 
-        // Function to get HTML files from the MapsCreated directory
-        async function listHtmlFiles() {
+        // Predefined list of mindmap files (kept for backwards compatibility)
+        const predefinedMindmapFiles = [
+            "Entrepreneurship_Management.html",
+            "Business_Ethics_&_Corporate_Governance.html",
+            "International_Financial_Management.html"
+        ];
+
+        // Function to get all HTML files in the current directory
+        async function getAllHtmlFiles() {
             try {
-                // Use the GitHub API to list files in the repository
-                const repoOwner = 'anshusrathe'; // Replace with your GitHub username
-                const repoName = 'Mindmaps'; // Replace with your repository name
-                const path = 'Mindmaps'; // Path to the Mindmaps folder
+                // Read directory contents
+                const response = await fetch('.');
+                const text = await response.text();
                 
-                const response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${path}`);
-                const files = await response.json();
+                // Create a temporary div to parse the HTML
+                const parser = new DOMParser();
+                const htmlDoc = parser.parseFromString(text, 'text/html');
                 
-                // Filter and create links for HTML files
-                const htmlFiles = files
-                    .filter(file => file.name.endsWith('.html'))
-                    .sort((a, b) => a.name.localeCompare(b.name));
+                // Find all links ending with .html
+                const links = Array.from(htmlDoc.querySelectorAll('a'))
+                    .map(a => a.href)
+                    .filter(href => href.endsWith('.html') && !href.includes('index.html'));
                 
-                return htmlFiles.map(file => file.name);
+                // Extract filenames from full URLs
+                const fileNames = links.map(href => {
+                    const url = new URL(href);
+                    return url.pathname.split('/').pop();
+                });
+
+                return fileNames;
             } catch (error) {
-                console.error('Error fetching files:', error);
+                console.error('Error fetching HTML files:', error);
                 return [];
             }
         }
 
-        // Update mindmap list with dynamic or predefined files
+        // Update mindmap list with dynamic files
         async function updateMindmapList() {
             try {
-                // Try to fetch files dynamically
-                const dynamicFiles = await listHtmlFiles();
-                
-                // If no dynamic files found, use predefined list as fallback
-                const mindmapFiles = dynamicFiles.length > 0 
-                    ? dynamicFiles 
-                    : [
-                        "Entrepreneurship_Management.html",
-                        "Business_Ethics_&_Corporate_Governance.html",
-                        "International_Financial_Management.html"
-                    ];
+                // Try to get all HTML files
+                let mindmapFiles = await getAllHtmlFiles();
+
+                // If no files found, fall back to predefined list
+                if (mindmapFiles.length === 0) {
+                    mindmapFiles = predefinedMindmapFiles;
+                }
 
                 // Clear existing list
                 mindmapList.innerHTML = '';
@@ -169,8 +178,8 @@
         // Update list when page loads
         updateMindmapList();
 
-        // Optional: Add a comment explaining how to update the list
-        console.log('To add new mindmaps, add HTML files to the Mindmaps folder.');
+        // Optional: Add a comment explaining how to add new mindmaps
+        console.log('To add new mindmaps, simply add HTML files to this directory.');
     </script>
 </body>
 </html>
