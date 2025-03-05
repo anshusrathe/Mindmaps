@@ -18,6 +18,18 @@
             border-bottom: 2px solid #333;
             padding-bottom: 10px;
         }
+        #search-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        #search-input {
+            width: 100%;
+            max-width: 400px;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+        }
         ul {
             list-style-type: none;
             padding: 0;
@@ -42,11 +54,18 @@
             text-align: center;
             display: none;
         }
+        .hidden {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
     <h1>Learn Through Mindmaps</h1>
     
+    <div id="search-container">
+        <input type="text" id="search-input" placeholder="Search mindmaps...">
+    </div>
+
     <div id="error-message">
         Error: Unable to load mindmap files.
     </div>
@@ -61,6 +80,7 @@
     <script>
         const mindmapList = document.getElementById('mindmap-list');
         const errorMessage = document.getElementById('error-message');
+        const searchInput = document.getElementById('search-input');
 
         // Predefined list of mindmap files
         const mindmapFiles = [
@@ -98,6 +118,24 @@
                 errorMessage.style.display = 'block';
             }
         }
+
+        // Search functionality
+        function searchMindmaps() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const listItems = mindmapList.getElementsByTagName('li');
+
+            for (let item of listItems) {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    item.classList.remove('hidden');
+                } else {
+                    item.classList.add('hidden');
+                }
+            }
+        }
+
+        // Add event listener for search input
+        searchInput.addEventListener('input', searchMindmaps);
 
         // Update list when page loads
         updateMindmapList();
