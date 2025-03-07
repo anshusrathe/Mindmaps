@@ -5,54 +5,245 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Learn Through Mindmaps</title>
     <style>
+        :root {
+            --primary-color: #3a7bd5;
+            --secondary-color: #00d2ff;
+            --text-color: #333;
+            --accent-color: #ff6b6b;
+            --light-bg: #f7f9fc;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            box-sizing: border-box;
+            transition: all 0.2s ease;
+        }
+        
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            width: 90%;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 20px;
             line-height: 1.6;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4eaf0 100%);
+            min-height: 100vh;
+            color: var(--text-color);
+            opacity: 0;
+            transition: opacity 0.5s ease;
         }
+        
         h1 {
-            color: #333;
+            color: var(--primary-color);
             text-align: center;
-            border-bottom: 2px solid #333;
-            padding-bottom: 10px;
+            padding-bottom: 15px;
+            margin-top: 10px;
+            position: relative;
+            font-size: 2.2rem;
         }
+        
+        h1::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(to right, var(--secondary-color), var(--primary-color));
+            border-radius: 3px;
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            margin-top: 30px;
+            font-size: 1.6rem;
+        }
+        
+        .intro-text {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+            color: #555;
+        }
+        
+        .search-container {
+            margin: 30px auto;
+            text-align: center;
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+        }
+        
+        #search-input {
+            padding: 12px 20px;
+            width: 100%;
+            border: 2px solid #ddd;
+            border-radius: 30px;
+            font-size: 16px;
+            background-color: white;
+            box-shadow: var(--box-shadow);
+        }
+        
+        #search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(58, 123, 213, 0.2);
+        }
+        
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+        }
+        
         ul {
             list-style-type: none;
             padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
         }
+        
         li {
-            margin-bottom: 15px;
-            background-color: #f4f4f4;
-            padding: 10px;
-            border-radius: 5px;
+            margin-bottom: 0;
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: var(--box-shadow);
+            transition: transform 0.2s;
+            border-left: 4px solid var(--primary-color);
         }
+        
+        li:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
         a {
             text-decoration: none;
-            color: #0066cc;
-            font-weight: bold;
+            color: var(--primary-color);
+            font-weight: 600;
+            display: block;
+            padding: 3px 0;
         }
+        
         a:hover {
-            text-decoration: underline;
-            color: #004080;
+            color: var(--secondary-color);
         }
+        
         #error-message {
-            color: red;
+            color: var(--accent-color);
             text-align: center;
             display: none;
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px auto;
+            max-width: 500px;
+            box-shadow: var(--box-shadow);
+            border-left: 4px solid var(--accent-color);
+        }
+        
+        #no-results {
+            text-align: center;
+            margin: 40px auto;
+            font-style: italic;
+            color: #666;
+            display: none;
+            background-color: var(--light-bg);
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 500px;
+        }
+        
+        .new-badge {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            color: white;
+            font-size: 0.7em;
+            padding: 3px 8px;
+            border-radius: 10px;
+            margin-left: 8px;
+            font-weight: bold;
+            vertical-align: middle;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.8; }
+            50% { opacity: 1; }
+            100% { opacity: 0.8; }
+        }
+        
+        .count-display {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            body {
+                width: 95%;
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            ul {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                width: 100%;
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .search-container {
+                width: 90%;
+            }
+            
+            ul {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
     <h1>Learn Through Mindmaps</h1>
     
+    <p class="intro-text">Expand your knowledge with our collection of interactive mindmaps! These visual learning tools help you connect ideas and master new concepts in a fun, engaging way.</p>
+    
     <div id="error-message">
-        Error: Unable to load mindmap files. Please check your repository setup.
+        <strong>Oops!</strong> We couldn't load the mindmaps. Please check your connection and try again.
     </div>
 
+    <div class="search-container">
+        <input type="text" id="search-input" placeholder="Looking for something specific? Search here..." aria-label="Search mindmaps">
+        <span class="search-icon">🔍</span>
+    </div>
+
+    <div class="count-display" id="results-count"></div>
+
     <div>
-        <h2>List of Mindmaps</h2>
+        <h2>Explore Our Mindmaps</h2>
+        <div id="no-results">No matching mindmaps found. Try a different search term!</div>
         <ul id="mindmap-list">
             <!-- Mindmap files will be dynamically added here -->
         </ul>
@@ -61,9 +252,17 @@
     <script>
         const mindmapList = document.getElementById('mindmap-list');
         const errorMessage = document.getElementById('error-message');
+        const searchInput = document.getElementById('search-input');
+        const noResults = document.getElementById('no-results');
+        
+        // Store the complete list of mindmaps
+        let allMindmaps = [];
 
         async function updateMindmapList() {
             try {
+                // Show a loading state
+                mindmapList.innerHTML = '<div style="text-align: center; padding: 20px;">Loading your mindmaps...</div>';
+                
                 // Add a timestamp to bypass cache
                 const cacheBuster = `?_=${new Date().getTime()}`;
 
@@ -87,47 +286,148 @@
                     return dateB - dateA; // Descending order (newest first)
                 });
                 
+                // Store all mindmaps for searching
+                allMindmaps = sortedFiles;
+                
                 // Add each file from the manifest
-                sortedFiles.forEach(file => {
-                    const listItem = document.createElement('li');
-                    const fileLink = document.createElement('a');
-                    fileLink.href = `MapsCreated/${file.filename}`;
-                    
-                    // Format the display name: remove .html extension and replace underscores with spaces
-                    const displayName = file.filename.replace('.html', '').replace(/_/g, ' ');
-                    fileLink.textContent = displayName;
-                    
-                    // Add a "NEW" badge for files added in the last 1 days
-                    const addedDate = new Date(file.added);
-                    const now = new Date();
-                    const daysDiff = Math.floor((now - addedDate) / (1000 * 60 * 60 * 24));
-                    
-                    if (daysDiff < 1) {
-                        const newBadge = document.createElement('span');
-                        newBadge.textContent = ' NEW';
-                        newBadge.style.color = '#ff6600';
-                        newBadge.style.fontWeight = 'bold';
-                        newBadge.style.fontSize = '0.8em';
-                        fileLink.appendChild(newBadge);
-                    }
-                    
-                    listItem.appendChild(fileLink);
-                    mindmapList.appendChild(listItem);
-                });
+                displayMindmaps(sortedFiles);
 
                 // Hide error message if files are found
                 errorMessage.style.display = 'none';
+                
+                return sortedFiles;
             } catch (error) {
                 console.error('Error fetching mindmap files:', error);
                 errorMessage.style.display = 'block';
                 
                 // Try again sooner if there was an error
                 setTimeout(updateMindmapList, 10000);
+                
+                return [];
             }
         }
 
+        function displayMindmaps(files) {
+            // Clear current list
+            mindmapList.innerHTML = '';
+            
+            // Check if there are any files to display
+            if (files.length === 0) {
+                noResults.style.display = 'block';
+                return;
+            }
+            
+            noResults.style.display = 'none';
+            
+            // Display each mindmap
+            files.forEach(file => {
+                const listItem = document.createElement('li');
+                const fileLink = document.createElement('a');
+                fileLink.href = `MapsCreated/${file.filename}`;
+                
+                // Format the display name: remove .html extension and replace underscores with spaces
+                const displayName = file.filename.replace('.html', '').replace(/_/g, ' ');
+                fileLink.textContent = displayName;
+                
+                // Add a "NEW" badge for files added in the last 3 days
+                const addedDate = new Date(file.added);
+                const now = new Date();
+                const daysDiff = Math.floor((now - addedDate) / (1000 * 60 * 60 * 24));
+                
+                if (daysDiff < 3) {
+                    const newBadge = document.createElement('span');
+                    newBadge.textContent = 'NEW';
+                    newBadge.className = 'new-badge';
+                    fileLink.appendChild(newBadge);
+                }
+                
+                listItem.appendChild(fileLink);
+                mindmapList.appendChild(listItem);
+            });
+        }
+
+        const resultsCount = document.getElementById('results-count');
+        
+        // Update results count
+        function updateResultsCount(count, total) {
+            if (searchInput.value.trim() === '') {
+                resultsCount.textContent = `Showing all ${count} mindmaps`;
+            } else {
+                resultsCount.textContent = `Found ${count} of ${total} mindmaps`;
+            }
+        }
+        
+        // Add a little welcome message when the page loads
+        function showWelcomeMessage() {
+            if (allMindmaps.length > 0) {
+                resultsCount.textContent = `Welcome! We have ${allMindmaps.length} mindmaps ready for you to explore.`;
+            }
+        }
+        
+        // Enhanced search functionality with highlighting
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase().trim();
+            
+            if (searchTerm === '') {
+                // If search is empty, show all mindmaps
+                displayMindmaps(allMindmaps);
+                updateResultsCount(allMindmaps.length, allMindmaps.length);
+                return;
+            }
+            
+            // Filter mindmaps based on search term
+            const filteredMindmaps = allMindmaps.filter(file => {
+                const displayName = file.filename.replace('.html', '').replace(/_/g, ' ').toLowerCase();
+                return displayName.includes(searchTerm);
+            });
+            
+            // Display filtered results
+            displayMindmaps(filteredMindmaps);
+            updateResultsCount(filteredMindmaps.length, allMindmaps.length);
+        });
+        
+        // Add a fun placeholder rotation for the search input
+        const placeholders = [
+            "Looking for something specific?",
+            "Search by topic or keyword...",
+            "What would you like to learn today?",
+            "Type to find your perfect mindmap...",
+            "Curious about something? Search here!",
+            "Find your next learning adventure..."
+        ];
+        
+        let placeholderIndex = 0;
+        
+        // Change placeholder text every 3 seconds
+        setInterval(() => {
+            if (!searchInput.value && document.activeElement !== searchInput) {
+                placeholderIndex = (placeholderIndex + 1) % placeholders.length;
+                searchInput.setAttribute('placeholder', placeholders[placeholderIndex]);
+            }
+        }, 3000);
+
         // Update the list when the page loads
-        updateMindmapList();
+        updateMindmapList().then(() => {
+            showWelcomeMessage();
+        });
+        
+        // Add a loading animation
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 300);
+        });
+        
+        // Add a fun interaction when clicking on list items
+        mindmapList.addEventListener('click', (event) => {
+            const listItem = event.target.closest('li');
+            if (listItem) {
+                listItem.style.transform = 'scale(0.97)';
+                setTimeout(() => {
+                    listItem.style.transform = '';
+                }, 150);
+            }
+        });
     </script>
 </body>
 </html>
