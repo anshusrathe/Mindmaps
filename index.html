@@ -190,6 +190,26 @@
             color: #666;
         }
         
+        /* Footer styling */
+        footer {
+            margin-top: 60px;
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid #ddd;
+            color: #777;
+            font-size: 0.9rem;
+        }
+        
+        footer a {
+            display: inline;
+            color: var(--primary-color);
+            font-weight: normal;
+        }
+        
+        footer a:hover {
+            text-decoration: underline;
+        }
+        
         /* Responsive adjustments */
         @media (max-width: 768px) {
             body {
@@ -249,6 +269,10 @@
             <!-- Mindmap files will be dynamically added here -->
         </ul>
     </div>
+
+    <footer>
+        Mindmaps on this website are created with the help of the online available tool <a href="https://markmap.js.org/" target="_blank">markmap</a> owned by <a href="https://github.com/gera2ld" target="_blank">gera2ld</a>.
+    </footer>
 
     <script>
         const mindmapList = document.getElementById('mindmap-list');
