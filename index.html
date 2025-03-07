@@ -80,15 +80,36 @@
                 // Clear any existing list items
                 mindmapList.innerHTML = '';
                 
+                // Sort files by added date (most recent first)
+                const sortedFiles = [...manifest.files].sort((a, b) => {
+                    const dateA = new Date(a.added);
+                    const dateB = new Date(b.added);
+                    return dateB - dateA; // Descending order (newest first)
+                });
+                
                 // Add each file from the manifest
-                manifest.files.forEach(fileName => {
+                sortedFiles.forEach(file => {
                     const listItem = document.createElement('li');
                     const fileLink = document.createElement('a');
-                    fileLink.href = `MapsCreated/${fileName}`;
+                    fileLink.href = `MapsCreated/${file.filename}`;
                     
                     // Format the display name: remove .html extension and replace underscores with spaces
-                    const displayName = fileName.replace('.html', '').replace(/_/g, ' ');
+                    const displayName = file.filename.replace('.html', '').replace(/_/g, ' ');
                     fileLink.textContent = displayName;
+                    
+                    // Add a "NEW" badge for files added in the last 7 days
+                    const addedDate = new Date(file.added);
+                    const now = new Date();
+                    const daysDiff = Math.floor((now - addedDate) / (1000 * 60 * 60 * 24));
+                    
+                    if (daysDiff < 7) {
+                        const newBadge = document.createElement('span');
+                        newBadge.textContent = ' NEW';
+                        newBadge.style.color = '#ff6600';
+                        newBadge.style.fontWeight = 'bold';
+                        newBadge.style.fontSize = '0.8em';
+                        fileLink.appendChild(newBadge);
+                    }
                     
                     listItem.appendChild(fileLink);
                     mindmapList.appendChild(listItem);
