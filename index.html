@@ -97,12 +97,12 @@
                     const displayName = file.filename.replace('.html', '').replace(/_/g, ' ');
                     fileLink.textContent = displayName;
                     
-                    // Add a "NEW" badge for files added in the last 7 days
+                    // Add a "NEW" badge for files added in the last 1 days
                     const addedDate = new Date(file.added);
                     const now = new Date();
                     const daysDiff = Math.floor((now - addedDate) / (1000 * 60 * 60 * 24));
                     
-                    if (daysDiff < 7) {
+                    if (daysDiff < 1) {
                         const newBadge = document.createElement('span');
                         newBadge.textContent = ' NEW';
                         newBadge.style.color = '#ff6600';
