@@ -64,38 +64,31 @@
 
         async function updateMindmapList() {
             try {
-                // Fetch the list of files in the MapsCreated directory
-                const response = await fetch('MapsCreated/');
+                // Fetch the manifest.json file that contains the list of mindmap files
+                const response = await fetch('MapsCreated/manifest.json');
                 
                 if (!response.ok) {
-                    throw new Error('Failed to fetch directory contents');
+                    throw new Error('Failed to fetch manifest.json');
                 }
 
-                // Parse the response as text (this assumes a directory listing HTML)
-                const text = await response.text();
-                
-                // Create a temporary div to parse the HTML
-                const parser = new DOMParser();
-                const htmlDoc = parser.parseFromString(text, 'text/html');
-                
-                // Select all file links (adjust selector as needed based on your server's directory listing)
-                const fileLinks = htmlDoc.querySelectorAll('a');
+                // Parse the response as JSON
+                const manifest = await response.json();
                 
                 // Clear any existing list items
                 mindmapList.innerHTML = '';
                 
-                // Filter and add HTML files
-                fileLinks.forEach(link => {
-                    const fileName = link.textContent;
-                    // Only add .html files that are not directories
-                    if (fileName.endsWith('.html') && !fileName.endsWith('/')) {
-                        const listItem = document.createElement('li');
-                        const fileLink = document.createElement('a');
-                        fileLink.href = `MapsCreated/${fileName}`;
-                        fileLink.textContent = fileName.replace('.html', '').replace(/_/g, ' ');
-                        listItem.appendChild(fileLink);
-                        mindmapList.appendChild(listItem);
-                    }
+                // Add each file from the manifest
+                manifest.files.forEach(fileName => {
+                    const listItem = document.createElement('li');
+                    const fileLink = document.createElement('a');
+                    fileLink.href = `MapsCreated/${fileName}`;
+                    
+                    // Format the display name: remove .html extension and replace underscores with spaces
+                    const displayName = fileName.replace('.html', '').replace(/_/g, ' ');
+                    fileLink.textContent = displayName;
+                    
+                    listItem.appendChild(fileLink);
+                    mindmapList.appendChild(listItem);
                 });
 
                 // Hide error message if files are found
