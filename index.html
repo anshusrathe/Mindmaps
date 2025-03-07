@@ -46,11 +46,7 @@
 </head>
 <body>
     <h1>Learn Through Mindmaps</h1>
-
-    <div id="search-container">
-        <input type="text" id="search-input" placeholder="Search mindmaps...">
-    </div>
-
+    
     <div id="error-message">
         Error: Unable to load mindmap files. Please check your repository setup.
     </div>
@@ -65,7 +61,6 @@
     <script>
         const mindmapList = document.getElementById('mindmap-list');
         const errorMessage = document.getElementById('error-message');
-        const searchInput = document.getElementById('search-input');
 
         async function updateMindmapList() {
             try {
@@ -130,24 +125,6 @@
                 setTimeout(updateMindmapList, 10000);
             }
         }
-
-        // Search functionality
-        function searchMindmaps() {
-            const searchTerm = searchInput.value.toLowerCase();
-            const listItems = mindmapList.getElementsByTagName('li');
-
-            for (let item of listItems) {
-                const text = item.textContent.toLowerCase();
-                if (text.includes(searchTerm)) {
-                    item.classList.remove('hidden');
-                } else {
-                    item.classList.add('hidden');
-                }
-            }
-        }
-
-        // Add event listener for search input
-        searchInput.addEventListener('input', searchMindmaps);
 
         // Update the list when the page loads
         updateMindmapList();
